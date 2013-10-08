@@ -1,0 +1,133 @@
+#!/bin/sh
+
+set -ex
+
+# Get the current branch name.
+branch=`git rev-parse --abbrev-ref HEAD`
+# Determine the commit at which the current branch diverged.
+ancestor=`git merge-base master HEAD`
+# Stash any uncommited, changed files.
+git stash
+# Revert the branch back to the ancestor SHA.
+git reset --hard $ancestor
+# Squash all commits from ancestor to previous SHA.
+git merge --squash HEAD@{1}
+# Perform the commit, prompting for the message.
+git commit
+# Fetch the latest changes from the upstream branch.
+git fetch origin master
+# Rebase the current single commit onto the latest.
+git rebase master
+# Restore previous uncommited changes, if any.
+git stash pop
+
+echo "Done! Push with 'git push -f origin $branch'."
+
+exit 0 # High five! Everything worked.
+
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+<style type="text/css">
+  body {
+    border-top: 4px solid #48b983;
+    background-color: #282827;
+  }
+  h1 {
+    color: #DCD8CF;
+    text-shadow: -2px 2px #32835c;
+    letter-spacing: 4px;
+    font-size: 50px;
+    font-weight: 200;
+  }
+  h3 {
+    color: #888;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-top: 40px;
+  }
+  p {
+    color: #DCD8CF;
+  }
+  code {
+    color: #48b983;
+    background-color: transparent;
+  }
+  pre {
+    padding: 0;
+    border-color: #32835c;
+    color: #b0bbb0;
+  }
+  pre.inline {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  pre code .string {
+    color: #40a776;
+  }
+  .footer {
+    margin-top: 70px;
+    text-align: center;
+  }
+  .footer p {
+    color: #888;
+  }
+  a:link, a:visited, a:hover, a:active {
+    color: #32835c;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <h1>Rebase and Squash!</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <p class="lead">This site will assist you in ensuring that your pull requests are squashed and rebased on the latest <code>master</code>.</p>
+    
+      <h3>Execution</h3>
+      <p>To run, execute the following command in your terminal:</p>
+      <pre class="inline"><code class="language-bash">curl http://rebaseandsqua.sh | sh</code></pre>
+      <p>The script will squash your current work into a single commit, prompt you for a commit message, and then attempt to rebase on the latest changes from <code>master</code>.</p>
+
+      <h3>Under The Hood</h3>
+      <p>How does the script work?</p>
+      <p>You can view a full copy of the commands it runs to the right, or simply <strong>view the source</strong> of this page!</p>
+    </div>
+    <div class="col-md-6">
+      <div id="pre"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 footer">
+      <p>&copy;2013 <a href="http://twitter.com/JakeWharton">Jake Wharton</a></p>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  // Get the implicit body element.
+  var body = document.getElementsByTagName("body")[0];
+  // The bash script will be the first text node. Grab it.
+  var script = body.childNodes[0];
+  // Remove the text node from the body tag.
+  body.removeChild(script);
+  // Create a new pre tag.
+  var pre = document.createElement("pre");
+  var code = document.createElement("code");
+  code.className = "language-bash";
+  pre.appendChild(code);
+  // Place the script's text inside of the pre tag.
+  code.appendChild(script);
+  // Put the new pre tag in a placeholder
+  document.getElementById("pre").appendChild(pre);
+</script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/dark.min.css">
+<script type="text/javascript">
+  hljs.initHighlightingOnLoad();
+</script>
