@@ -20,7 +20,7 @@ git rebase master
 # Restore previous uncommited changes, if any.
 git stash pop || true
 
-printf "\nDone! Push with 'git push -f origin $branch'.\n"
+printf "\nDone! Push with 'git push -f origin %s'\n" "$branch"
 
 exit 0 # High five! Everything worked.
 
