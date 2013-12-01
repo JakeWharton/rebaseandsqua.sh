@@ -6,7 +6,7 @@ branch=`git rev-parse --abbrev-ref HEAD`
 # Determine the commit at which the current branch diverged.
 ancestor=`git merge-base master HEAD`
 # Stash any uncommited, changed files.
-git stash
+git stash --all
 # Revert the branch back to the ancestor SHA.
 git reset --hard $ancestor
 # Squash all commits from ancestor to previous SHA.
